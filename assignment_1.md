@@ -1,5 +1,3 @@
-assignment description:
-[start assignment description]
 # Lab 1: Proof of Work over IPv8
 
 ## Overview
@@ -152,10 +150,6 @@ A working IPv8 client that:
 You are done when you receive `Accepted`, `Accepted (already registered)`, `Accepted (github URL updated)`, or `Accepted (re-registered with new key)`.
 
 There is nothing to submit manually. The repository URL you submitted is the canonical location of your client code; your public key is your proof of completion.
-
-[end assignment description]
-
-read the lecture slides and the assignment description and explain to me what i should do.
 
 
 # Anouncement 1 
