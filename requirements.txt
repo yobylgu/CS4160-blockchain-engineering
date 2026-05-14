@@ -1,0 +1,24 @@
+aiohappyeyeballs==2.6.1
+aiohttp==3.13.5
+aiohttp-apispec==2.2.3
+aiosignal==1.4.0
+apispec==3.3.2
+attrs==26.1.0
+cffi==2.0.0
+cryptography<47.0.0
+frozenlist==1.8.0
+idna==3.13
+Jinja2==3.1.6
+libnacl==2.1.0
+MarkupSafe==3.0.3
+marshmallow==4.3.0
+multidict==6.7.1
+packaging==26.2
+propcache==0.4.1
+pyasn1==0.6.3
+pycparser==3.0
+pyipv8 @ git+https://github.com/Tribler/py-ipv8.git@241d0c272e8828d6f5b576b8f7e7ee783845e164
+pyOpenSSL==26.2.0
+typing_extensions==4.15.0
+webargs==5.5.3
+yarl==1.23.0
