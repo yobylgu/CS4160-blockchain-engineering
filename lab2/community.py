@@ -30,6 +30,13 @@ RELAY_RETRY_SECONDS = 0.25
 SIGNATURE_RETRY_SECONDS = 0.25
 BUNDLE_RETRY_SECONDS = 0.75
 
+DEBUG_RX = True
+
+
+def _dbg(msg: str) -> None:
+    if DEBUG_RX:
+        print(msg)
+
 
 # --- Server protocol (msg_ids 1-6), formats fixed by assignment_2.md ---
 
@@ -449,7 +456,10 @@ class Lab2Community(Community):
                 print("All 3 rounds completed.")
                 return
             next_round = payload.round_number + 1
-            if self.local_index == self.submitter_index_for_round(next_round):
+            requester = self.submitter_index_for_round(next_round)
+            if next_round == 3:
+                requester = 1
+            if self.local_index == requester:
                 self.waiting_challenge_round = next_round
                 self._send_challenge_request(next_round)
             return
@@ -493,27 +503,65 @@ class Lab2Community(Community):
 
     @lazy_wrapper(TeamNoncePayload)
     def on_team_nonce(self, peer: Peer, payload: TeamNoncePayload) -> None:
+        _dbg(
+            "RX TeamNoncePayload from "
+            f"{peer.address} group={payload.group_id!r} round={payload.round_number} "
+            f"submitter={payload.submitter_index + 1} nonce_len={len(payload.nonce)}"
+        )
         sender = self._member_index_for(peer)
         if sender is None or not self._valid_group(payload.group_id):
+            _dbg(
+                "Drop TeamNoncePayload: "
+                f"sender={sender} valid_group={self._valid_group(payload.group_id)}"
+            )
             return
         if payload.submitter_index != self.submitter_index_for_round(payload.round_number):
+            _dbg(
+                "Drop TeamNoncePayload: "
+                f"submitter_index mismatch (got {payload.submitter_index + 1}, "
+                f"expected {self.submitter_index_for_round(payload.round_number) + 1})"
+            )
             return
         print(f"Nonce relay for round {payload.round_number} from member {sender + 1}.")
         self._install_nonce(payload.round_number, payload.nonce, payload.deadline, False)
 
     @lazy_wrapper(TeamSignaturePayload)
     def on_team_signature(self, peer: Peer, payload: TeamSignaturePayload) -> None:
+        _dbg(
+            "RX TeamSignaturePayload from "
+            f"{peer.address} group={payload.group_id!r} round={payload.round_number} "
+            f"signer={payload.signer_index + 1}"
+        )
         sender = self._member_index_for(peer)
         if sender is None or not self._valid_group(payload.group_id):
+            _dbg(
+                "Drop TeamSignaturePayload: "
+                f"sender={sender} valid_group={self._valid_group(payload.group_id)}"
+            )
             return
         if sender != payload.signer_index:
+            _dbg(
+                "Drop TeamSignaturePayload: "
+                f"signer_index mismatch (sender {sender + 1}, payload {payload.signer_index + 1})"
+            )
             return
         st = self.round_state
         if payload.round_number != st.round_number or st.nonce is None:
+            _dbg(
+                "Drop TeamSignaturePayload: "
+                f"round/nonce mismatch (payload round {payload.round_number}, "
+                f"state round {st.round_number}, nonce_set={st.nonce is not None})"
+            )
             return
         if payload.nonce_hash != _sha256(st.nonce):
+            _dbg("Drop TeamSignaturePayload: nonce_hash mismatch")
             return
         if self.local_index != self.submitter_index_for_round(payload.round_number):
+            _dbg(
+                "Drop TeamSignaturePayload: "
+                f"not submitter (local {self.local_index + 1}, "
+                f"expected {self.submitter_index_for_round(payload.round_number) + 1})"
+            )
             return
         signer_pk = self.member_public_keys[payload.signer_index]
         if not self.crypto.is_valid_signature(signer_pk, st.nonce, payload.signature):
@@ -538,19 +586,44 @@ class Lab2Community(Community):
 
     @lazy_wrapper(TeamAckPayload)
     def on_team_ack(self, peer: Peer, payload: TeamAckPayload) -> None:
+        _dbg(
+            "RX TeamAckPayload from "
+            f"{peer.address} group={payload.group_id!r} round={payload.round_number} "
+            f"ack_kind={payload.ack_kind!r} signer={payload.signer_index + 1}"
+        )
         sender = self._member_index_for(peer)
         if sender is None or not self._valid_group(payload.group_id):
+            _dbg(
+                "Drop TeamAckPayload: "
+                f"sender={sender} valid_group={self._valid_group(payload.group_id)}"
+            )
             return
         if payload.ack_kind != "signature":
+            _dbg("Drop TeamAckPayload: ack_kind mismatch")
             return
         st = self.round_state
         if payload.round_number != st.round_number or st.nonce is None:
+            _dbg(
+                "Drop TeamAckPayload: "
+                f"round/nonce mismatch (payload round {payload.round_number}, "
+                f"state round {st.round_number}, nonce_set={st.nonce is not None})"
+            )
             return
         if payload.nonce_hash != _sha256(st.nonce):
+            _dbg("Drop TeamAckPayload: nonce_hash mismatch")
             return
         if payload.signer_index != self.local_index:
+            _dbg(
+                "Drop TeamAckPayload: signer_index mismatch "
+                f"(payload {payload.signer_index + 1}, local {self.local_index + 1})"
+            )
             return
         if sender != self.submitter_index_for_round(payload.round_number):
+            _dbg(
+                "Drop TeamAckPayload: sender not submitter "
+                f"(sender {sender + 1}, expected "
+                f"{self.submitter_index_for_round(payload.round_number) + 1})"
+            )
             return
         st.signature_acks.add(payload.signer_index)
         print(f"Signature ACK received for round {payload.round_number}.")
