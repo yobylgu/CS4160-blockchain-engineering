@@ -2,7 +2,7 @@ import hashlib
 import struct
 import unittest
 
-from blockchain_utils import (
+from lab3.blockchain_utils import (
     HASH_SIZE,
     HEADER_SIZE,
     Block,

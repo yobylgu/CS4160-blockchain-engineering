@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
 
-from registration_community import (
+from lab3.registration_community import (
 	RegistrationCommunity,
 	RegisterBlockchainPayload,
 	RegisterBlockchainResponsePayload,

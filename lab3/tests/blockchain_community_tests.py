@@ -1,8 +1,8 @@
 from ipv8.keyvault.crypto import default_eccrypto
 from ipv8.test.base import TestBase
 
-import blockchain_community
-from blockchain_community import (
+from lab3 import blockchain_community
+from lab3.blockchain_community import (
 	ASSIGNMENT_MESSAGE_PAYLOADS,
 	BlockChainCommunitySettings,
 	BlockchainCommunity,
@@ -10,7 +10,7 @@ from blockchain_community import (
 	SubmitTransactionPayload,
 	TransactionGossipPayload,
 )
-from blockchain_utils import Block, BlockHeader, HASH_SIZE, mine_nonce, tx_hash, txs_hash
+from lab3.blockchain_utils import Block, BlockHeader, HASH_SIZE, mine_nonce, tx_hash, txs_hash
 
 
 def make_block(parent_hash: bytes, tx_hashes: list[bytes], difficulty: int, timestamp: int) -> Block:

@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from blockchain_utils import Block, has_valid_pow
-from mempool import Mempool
-from config import DIFFICULTY
+from .blockchain_utils import Block, has_valid_pow
+from .mempool import Mempool
+from .config import DIFFICULTY
 
 
 class Blockchain:

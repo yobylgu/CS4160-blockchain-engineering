@@ -1,6 +1,6 @@
 import unittest
 
-from mempool import Mempool
+from lab3.mempool import Mempool
 
 class TestMempool(unittest.TestCase):
     def setUp(self):

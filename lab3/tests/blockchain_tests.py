@@ -1,12 +1,12 @@
 import unittest
 
-from blockchain import Blockchain
-from blockchain_utils import (
+from lab3.blockchain import Blockchain
+from lab3.blockchain_utils import (
     Block,
     BlockHeader,
     txs_hash,
 )
-from mempool import Mempool
+from lab3.mempool import Mempool
 
 class TestBlockchain(unittest.TestCase):
     def setUp(self):

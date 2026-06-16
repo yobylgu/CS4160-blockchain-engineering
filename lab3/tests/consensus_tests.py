@@ -4,14 +4,14 @@ import hashlib
 from ipv8.keyvault.crypto import default_eccrypto
 from ipv8.test.base import TestBase
 
-import blockchain_community
-from blockchain_community import (
+from lab3 import blockchain_community
+from lab3.blockchain_community import (
 	BlockChainCommunitySettings,
 	BlockchainCommunity,
 	SubmitTransactionPayload,
 )
-from blockchain_utils import Block, BlockHeader, mine_nonce, tx_hash, txs_hash
-from mempool import Tx
+from lab3.blockchain_utils import Block, BlockHeader, mine_nonce, tx_hash, txs_hash
+from lab3.mempool import Tx
 
 
 def make_block(parent_hash, tx_hashes, difficulty, timestamp):

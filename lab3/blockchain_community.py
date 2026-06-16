@@ -9,8 +9,8 @@ from ipv8.lazy_community import lazy_wrapper
 from ipv8.messaging.lazy_payload import VariablePayload, vp_compile
 from ipv8.peer import Peer
 
-from blockchain import Blockchain
-from blockchain_utils import (
+from .blockchain import Blockchain
+from .blockchain_utils import (
 	Block,
 	BlockHeader,
 	HASH_SIZE,
@@ -20,8 +20,8 @@ from blockchain_utils import (
 	tx_hash,
 	txs_hash,
 )
-from mempool import Mempool, Tx
-from config import (
+from .mempool import Mempool, Tx
+from .config import (
 	DIFFICULTY,
 	MINE_CHUNK,
 	BLOCK_INTERVAL_RANGE,

@@ -7,8 +7,8 @@ from ipv8.configuration import ConfigBuilder, Strategy, WalkerDefinition, defaul
 from ipv8_service import IPv8
 from ipv8.util import run_forever
 
-from registration_community import RegistrationCommunity, DEFAULT_SERVER_PUBLIC_KEY_HEX
-from blockchain_community import BlockchainCommunity
+from .registration_community import RegistrationCommunity, DEFAULT_SERVER_PUBLIC_KEY_HEX
+from .blockchain_community import BlockchainCommunity
 
 class CustomBlockchainCommunity(BlockchainCommunity):
 	pass

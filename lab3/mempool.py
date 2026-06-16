@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Iterable
 import copy
 
-from blockchain_utils import tx_hash
+from .blockchain_utils import tx_hash
 
 # Tx = (sender_key, data, timestamp, signature)
 Tx = tuple[bytes, bytes, int, bytes]
